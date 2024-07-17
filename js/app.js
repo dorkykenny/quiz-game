@@ -255,7 +255,7 @@ function capitalCity() {
         }
     }
 
-        options.sort(() => Math.random() - 0.5);
+        options.sort(() => Math.random() - 0.5)
 
     // options.forEach((option) => {
     //         if (option === correctCapital) {
@@ -279,7 +279,31 @@ function capitalCity() {
 
 function continent() {
     const question = getRandomCountry()
+    const options = []
+    const correctContinent = question.continent
     questionEl.textContent = `What continent is ${question.country} in?`
+    options.push(correctContinent)
+
+    while (options.length < 4) {
+        let randomContinent = getRandomCountry()
+
+        if (!options.includes(randomContinent.continent) && randomContinent.continent !== correctContinent) {
+            options.push(randomContinent.continent)
+        }
+    }
+
+        options.sort(() => Math.random() - 0.5)
+
+        options.forEach((option) => {
+            const button = document.createElement('button')
+            button.textContent = option
+            if (option === correctContinent) {
+                button.addEventListener('click', selectedCorrectAnswer)
+            } else {
+                button.addEventListener('click', selectedIncorrectAnswer)
+            }
+            optionsEl.appendChild(button)
+        })
 }
 
 function nextRound() {
@@ -310,7 +334,7 @@ function selectedIncorrectAnswer() {
 
     if (lives === 0) {
         nextBtnEl.innerHTML=``
-        button.removeEventListener('click', selectedCorrectAnswer, selectedIncorrectAnswer)
+        // button.removeEventListener('click', selectedCorrectAnswer, selectedIncorrectAnswer)
     }
 }
 
