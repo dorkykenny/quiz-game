@@ -1,0 +1,23 @@
+body {
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 45px;
+}
+
+#capital-city, #continent {
+    padding: 10px 20px;
+    font-size: 30px;
+}
+
+.hidden {
+    display: none;
+}
+
+#options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 2rem;
+}
