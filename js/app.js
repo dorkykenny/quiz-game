@@ -199,7 +199,7 @@ const countries = [
     { country: "Zimbabwe", capital: "Harare", continent: "Africa" }
 ]
 
-const totalRounds = 20
+const totalRounds = 5
 const initialLives = 3
 
 /*---------------------------- Variables (state) ----------------------------*/
@@ -214,6 +214,7 @@ let gameCategory
 
 const categoryBtnsEl = document.querySelectorAll(`.game-category`)
 const categoryContainer = document.querySelector(`.category-container`)
+const gameContainer = document.querySelector(`.game-container`)
 const questionEl = document.getElementById(`question`)
 const optionsEl = document.getElementById(`options`)
 const feedbackEl = document.getElementById(`feedback`)
@@ -225,14 +226,48 @@ const roundsEl = document.getElementById(`rounds`)
 
 /*-------------------------------- Functions --------------------------------*/
 
+function homepage() {
+    categoryContainer.classList.remove(`hidden`)
+    gameContainer.classList.add(`hidden`)
+    resultEl.innerHTML = ``
+    lives = initialLives
+    round = 1
+    
+    checkForLives()
+}
+
+function nextRound() {
+    optionsEl.innerHTML = ``
+
+    roundsEl.classList.remove(`hidden`)
+    roundsEl.textContent = `Round: ${round}/${totalRounds}`
+    round++
+
+
+    if (gameCategory === `capital-city`) {
+        capitalCity()
+    } else if (gameCategory === `continent`) {
+        continent()
+    }
+
+    console.log(gameCategory)
+    livesEl.classList.remove(`hidden`)
+    // livesEl.textContent = `Lives: ${lives}/${initialLives}`
+
+    nextBtnEl.classList.add('hidden')
+
+    console.log(`test2`)
+}
+
+
 function startGame(event) {
     gameCategory = event.target.id
 
     categoryContainer.classList.add(`hidden`)
-
-    nextRound()
-
+    gameContainer.classList.remove(`hidden`)
     restartBtnEl.classList.add(`hidden`)
+    console.log(`test1`)
+    nextRound()
 }
 
 
@@ -256,15 +291,7 @@ function capitalCity() {
         }
     }
 
-        options.sort(() => Math.random() - 0.5)
-
-    // options.forEach((option) => {
-    //         if (option === correctCapital) {
-    //             optionsEl.innerHTML += `<button onclick='selectedCorrectAnswer()'>${option}</button>`
-    //         } else {
-    //             optionsEl.innerHTML += `<button onclick='selectedIncorrectAnswer()'>${option}</button>`
-    //         }
-    // }) 
+    options.sort(() => Math.random() - 0.5)
 
     options.forEach((option) => {
         const button = document.createElement('button')
@@ -311,27 +338,8 @@ function continent() {
     //     })
 }
 
-function nextRound() {
-    optionsEl.innerHTML=``
-
-    roundsEl.classList.remove(`hidden`)
-    roundsEl.textContent = `Round: ${round}/${totalRounds}`
-    round++
-
-    livesEl.classList.remove(`hidden`)
-    livesEl.textContent = `Lives: ${lives}/${initialLives}`
-
-    if (gameCategory === `capital-city`) {
-        capitalCity()
-    } else if (gameCategory === `continent`) {
-        continent()
-    }
-
-    nextBtnEl.classList.add('hidden')
-}
-
 function selectedCorrectAnswer(event) {
-    nextBtnEl.innerHTML=`<button>Next</button>`
+    nextBtnEl.innerHTML = `<button>Next</button>`
     nextBtnEl.classList.remove(`hidden`)
 
     const buttons = document.querySelectorAll('.option')
@@ -341,19 +349,19 @@ function selectedCorrectAnswer(event) {
         if (option.classList.contains('correct-answer')) {
             option.classList.add('show-correct-answer')
         } else {
-            option.classList.contains('incorrect-answer') 
+            option.classList.contains('incorrect-answer')
             option.classList.add('show-incorrect-answer')
-            }
+        }
     })
 
+    checkForLives()
     checkForWin()
 }
 
 function selectedIncorrectAnswer(event) {
-    nextBtnEl.innerHTML=`<button>Next</button>`
+    nextBtnEl.innerHTML = `<button>Next</button>`
     nextBtnEl.classList.remove(`hidden`)
     lives--
-    livesEl.textContent = `Lives: ${lives}/${initialLives}`
 
     const buttons = document.querySelectorAll('.option')
 
@@ -362,42 +370,56 @@ function selectedIncorrectAnswer(event) {
         if (option.classList.contains('correct-answer')) {
             option.classList.add('show-correct-answer')
         } else {
-            option.classList.contains('incorrect-answer') 
+            option.classList.contains('incorrect-answer')
             option.classList.add('show-incorrect-answer')
-            }
         }
+    }
     )
 
+    checkForLives()
     checkForWin()
 }
 
+function checkForLives() {
+    if (lives === 3) {
+        heart1El.classList.remove(`hidden`)
+        heart2El.classList.remove(`hidden`)
+        heart3El.classList.remove(`hidden`)
+        } else if (lives === 2) {
+            heart3El.classList.add(`hidden`)
+        } else if (lives === 1) {
+            heart2El.classList.add(`hidden`)
+        } else {
+            heart1El.classList.add(`hidden`)
+        }
+}
 
 function checkForWin() {
     if (lives === 0) {
-        nextBtnEl.innerHTML=``
-        resultEl.innerHTML='<p>YOU DUMB SHIT!</p>'
+        nextBtnEl.innerHTML = ``
+        resultEl.innerHTML = '<p>YOU DUMB SHIT!</p>'
         restartBtnEl.classList.remove(`hidden`)
     }
 
     if (round > totalRounds) {
-        nextBtnEl.innerHTML=``
-        resultEl.innerHTML=`<p>YOU WIN!</p>`
+        nextBtnEl.innerHTML = ``
+        resultEl.innerHTML = `<p>YOU WIN!</p>`
         restartBtnEl.classList.remove(`hidden`)
     }
 }
 
 
-
-
-// remove feedbackEl and just change colors of options when an answer is selected.
-
 /*----------------------------- Event Listeners -----------------------------*/
 
-categoryBtnsEl.forEach((category) => {
-    category.addEventListener(`click`, startGame)
+document.addEventListener(`DOMContentLoaded`, function(event) {
+    categoryBtnsEl.forEach((category) => {
+        category.addEventListener(`click`, startGame)
+    })
+    
+    nextBtnEl.addEventListener(`click`, nextRound)
+    
+    restartBtnEl.addEventListener(`click`, homepage)
 })
 
-nextBtnEl.addEventListener(`click`, nextRound)
 
-restartBtnEl.addEventListener(`click`, startGame)
 

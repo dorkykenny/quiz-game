@@ -1,14 +1,16 @@
 body {
     box-sizing: border-box;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 h1 {
     font-size: 45px;
+    text-align: center;
 }
 
-#capital-city, #continent {
-    padding: 10px 20px;
-    font-size: 30px;
+h2 {
+    text-align: center;
 }
 
 .hidden {
@@ -28,4 +30,43 @@ h1 {
 
 .show-incorrect-answer {
     background-color: red;
+}
+
+.category-container--buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.game-category {
+    padding: 10px 20px;
+    font-size: 14px;
+    appearance: none;
+    border: 2px solid black;
+}
+
+.game-category span {
+    display: block;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#lives {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+#lives.hidden {
+    display: none;
+}
+
+.heart {
+    width: 40px;
+    height: 40px;
+}
+
+ svg.heart path {
+    fill: #dc1c26;
 }
