@@ -218,8 +218,7 @@ const questionEl = document.getElementById(`question`)
 const optionsEl = document.getElementById(`options`)
 const feedbackEl = document.getElementById(`feedback`)
 const resultEl = document.getElementById(`result`)
-const startAgainBtnEl = document.getElementById(`start-again`)
-const switchCategoryBtnEl = document.getElementById(`switch-category`)
+const restartBtnEl = document.getElementById(`restart`)
 const nextBtnEl = document.getElementById(`next`)
 const livesEl = document.getElementById(`lives`)
 const roundsEl = document.getElementById(`rounds`)
@@ -232,6 +231,8 @@ function startGame(event) {
     categoryContainer.classList.add(`hidden`)
 
     nextRound()
+
+    restartBtnEl.classList.add(`hidden`)
 }
 
 
@@ -270,8 +271,10 @@ function capitalCity() {
         button.textContent = option
         if (option === correctCapital) {
             button.addEventListener('click', selectedCorrectAnswer)
+            button.classList.add('option', 'correct-answer')
         } else {
             button.addEventListener('click', selectedIncorrectAnswer)
+            button.classList.add('option', 'incorrect-answer')
         }
         optionsEl.appendChild(button)
     })
@@ -284,26 +287,28 @@ function continent() {
     questionEl.textContent = `What continent is ${question.country} in?`
     options.push(correctContinent)
 
-    while (options.length < 4) {
-        let randomContinent = getRandomCountry()
+    // while (options.length < 4) {
+    //     let randomContinent = getRandomCountry()
 
-        if (!options.includes(randomContinent.continent) && randomContinent.continent !== correctContinent) {
-            options.push(randomContinent.continent)
-        }
-    }
+    //     if (!options.includes(randomContinent.continent) && randomContinent.continent !== correctContinent) {
+    //         options.push(randomContinent.continent)
+    //     }
+    // }
 
-        options.sort(() => Math.random() - 0.5)
+    //     options.sort(() => Math.random() - 0.5)
 
-        options.forEach((option) => {
-            const button = document.createElement('button')
-            button.textContent = option
-            if (option === correctContinent) {
-                button.addEventListener('click', selectedCorrectAnswer)
-            } else {
-                button.addEventListener('click', selectedIncorrectAnswer)
-            }
-            optionsEl.appendChild(button)
-        })
+    //     options.forEach((option) => {
+    //         const button = document.createElement('button')
+    //         button.textContent = option
+    //         if (option === correctContinent) {
+    //             button.addEventListener('click', selectedCorrectAnswer)
+    //             button.classList.add('option', 'correct-answer')
+    //         } else {
+    //             button.addEventListener('click', selectedIncorrectAnswer)
+    //             button.classList.add('option', 'incorrect-answer')
+    //         }
+    //         optionsEl.appendChild(button)
+    //     })
 }
 
 function nextRound() {
@@ -321,23 +326,70 @@ function nextRound() {
     } else if (gameCategory === `continent`) {
         continent()
     }
+
+    nextBtnEl.classList.add('hidden')
 }
 
-function selectedCorrectAnswer() {
+function selectedCorrectAnswer(event) {
     nextBtnEl.innerHTML=`<button>Next</button>`
+    nextBtnEl.classList.remove(`hidden`)
+
+    const buttons = document.querySelectorAll('.option')
+
+    buttons.forEach((option) => {
+        option.disabled = true
+        if (option.classList.contains('correct-answer')) {
+            option.classList.add('show-correct-answer')
+        } else {
+            option.classList.contains('incorrect-answer') 
+            option.classList.add('show-incorrect-answer')
+            }
+    })
+
+    checkForWin()
 }
 
-function selectedIncorrectAnswer() {
+function selectedIncorrectAnswer(event) {
     nextBtnEl.innerHTML=`<button>Next</button>`
+    nextBtnEl.classList.remove(`hidden`)
     lives--
     livesEl.textContent = `Lives: ${lives}/${initialLives}`
 
+    const buttons = document.querySelectorAll('.option')
+
+    buttons.forEach((option) => {
+        option.disabled = true
+        if (option.classList.contains('correct-answer')) {
+            option.classList.add('show-correct-answer')
+        } else {
+            option.classList.contains('incorrect-answer') 
+            option.classList.add('show-incorrect-answer')
+            }
+        }
+    )
+
+    checkForWin()
+}
+
+
+function checkForWin() {
     if (lives === 0) {
         nextBtnEl.innerHTML=``
-        // button.removeEventListener('click', selectedCorrectAnswer, selectedIncorrectAnswer)
+        resultEl.innerHTML='<p>YOU DUMB SHIT!</p>'
+        restartBtnEl.classList.remove(`hidden`)
+    }
+
+    if (round > totalRounds) {
+        nextBtnEl.innerHTML=``
+        resultEl.innerHTML=`<p>YOU WIN!</p>`
+        restartBtnEl.classList.remove(`hidden`)
     }
 }
 
+
+
+
+// remove feedbackEl and just change colors of options when an answer is selected.
 
 /*----------------------------- Event Listeners -----------------------------*/
 
@@ -346,3 +398,6 @@ categoryBtnsEl.forEach((category) => {
 })
 
 nextBtnEl.addEventListener(`click`, nextRound)
+
+restartBtnEl.addEventListener(`click`, startGame)
+
