@@ -2,6 +2,7 @@ body {
     box-sizing: border-box;
     max-width: 600px;
     margin: 0 auto;
+    font-family: Helvetica, sans-serif;
 }
 
 h1 {
@@ -13,23 +14,54 @@ h2 {
     text-align: center;
 }
 
-.hidden {
-    display: none;
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+    width: 100%;
+    background-color: #d1d1d1;
+}
+
+#question {
+    font-size: 22px;
+    text-align: center;
+}
+
+#question strong {
+    font-size: 30px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-top: 10px;
 }
 
 #options {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    padding: 2rem;
+    margin: 2rem 0 1rem;
+}
+
+.option {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 30px;
+}
+
+.option:disabled {
+    cursor: no-drop;
 }
 
 .show-correct-answer {
     background-color: green;
+    color: white;
 }
 
 .show-incorrect-answer {
-    background-color: red;
+    background-color: rgb(157, 8, 8);
+    color: white
 }
 
 .category-container--buttons {
@@ -40,15 +72,18 @@ h2 {
 
 .game-category {
     padding: 10px 20px;
-    font-size: 14px;
+    font-size: 25px;
+    min-height: 70dvh;
     appearance: none;
     border: 2px solid black;
+    position: relative;
+    background: none;
 }
 
 .game-category span {
     display: block;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 30px;
 }
 
 #lives {
@@ -63,10 +98,52 @@ h2 {
 }
 
 .heart {
-    width: 40px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
 }
 
  svg.heart path {
     fill: #dc1c26;
+}
+
+#next, #restart { 
+    width: 100%;
+    margin-top: 1rem;
+    min-height: 110px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#result {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 20px;
+    border: solid 10px black;
+}
+
+#capital-city::after {
+    background-image: url(https://images.adsttc.com/media/images/5d44/14fa/284d/d1fd/3a00/003d/newsletter/eiffel-tower-in-paris-151-medium.jpg?1564742900);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    filter: blur(2px);
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.5;
+}
+
+
+
+
+
+.hidden {
+    display: none;
 }
